@@ -80,18 +80,16 @@ from cutadapt.compat import PY3
 logger = logging.getLogger()
 
 
+class CommandLineError(Exception):
+	pass
+
+
 class CutadaptOptionParser(OptionParser):
 	def get_usage(self):
 		return self.usage.lstrip().replace('%version', __version__)
 
 	def error(self, msg):
-		print('Run "cutadapt --help" to see command-line options.', file=sys.stderr)
-		print('See https://cutadapt.readthedocs.io/ for full documentation.', file=sys.stderr)
-		self.exit(2, "\n%s: error: %s\n" % (self.get_prog_name(), msg))
-
-
-class CommandLineError(Exception):
-	pass
+		raise CommandLineError(msg)
 
 
 class NiceFormatter(logging.Formatter):
@@ -701,7 +699,7 @@ def pipeline_from_parsed_args(options, paired, pair_filter_mode, quality_filenam
 	return pipeline
 
 
-def main(cmdlineargs=None, default_outfile=sys.stdout):
+def main(args, default_outfile=sys.stdout):
 	"""
 	Main function that sets up a processing pipeline and runs it.
 
@@ -710,9 +708,7 @@ def main(cmdlineargs=None, default_outfile=sys.stdout):
 	"""
 	start_time = time.time()
 	parser = get_option_parser()
-	if cmdlineargs is None:
-		cmdlineargs = sys.argv[1:]
-	options, args = parser.parse_args(args=cmdlineargs)
+	options, args = parser.parse_args(args=args)
 	# Setup logging only if there are not already any handlers (can happen when
 	# this function is being called externally such as from unit tests)
 	if not logging.root.handlers:
@@ -782,7 +778,7 @@ def main(cmdlineargs=None, default_outfile=sys.stdout):
 	opt = ' (' + implementation + ')' if implementation != 'CPython' else ''
 	logger.info("This is cutadapt %s with Python %s%s", __version__,
 		platform.python_version(), opt)
-	logger.info("Command line parameters: %s", " ".join(cmdlineargs))
+	logger.info("Command line parameters: %s", " ".join(args))
 	logger.info("Processing reads on %d core%s in %s mode ...",
 		cores, 's' if cores > 1 else '',
 		{False: 'single-end', 'first': 'paired-end legacy', 'both': 'paired-end'}[pipeline.paired])
@@ -817,6 +813,11 @@ def main(cmdlineargs=None, default_outfile=sys.stdout):
 				print_minimal_report(stats, elapsed, options.gc_content / 100)
 			else:
 				print_report(stats, elapsed, options.gc_content / 100)
+
+
+def _main():
+
+
 
 
 if __name__ == '__main__':
