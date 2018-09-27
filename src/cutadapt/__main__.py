@@ -62,8 +62,9 @@ import logging
 import platform
 import textwrap
 from xopen import xopen
+import dnaio
 
-from cutadapt import seqio, __version__
+from cutadapt import __version__
 from cutadapt.adapters import AdapterParser
 from cutadapt.modifiers import (LengthTagModifier, SuffixRemover, PrefixSuffixAdder,
 	ZeroCapper, QualityTrimmer, UnconditionalCutter, NEndTrimmer, AdapterCutter,
@@ -722,7 +723,7 @@ def main(cmdlineargs=None, default_outfile=sys.stdout):
 		runner.set_input(input_filename, file2=input_paired_filename,
 			fileformat=options.format, interleaved=is_interleaved_input)
 		runner.set_output(outfiles)
-	except (seqio.UnknownFileType, IOError) as e:
+	except (dnaio.UnknownFileFormat, IOError) as e:
 		parser.error(e)
 
 	implementation = platform.python_implementation()

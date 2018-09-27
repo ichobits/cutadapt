@@ -111,8 +111,8 @@ setup(
 	package_dir={'': 'src'},
 	packages=find_packages('src'),
 	entry_points={'console_scripts': ['cutadapt = cutadapt.__main__:main']},
-	install_requires=['xopen>=0.3.2'],
-	extras_require = {
+	install_requires=['dnaio', 'xopen>=0.3.2'],
+	extras_require={
 		'dev': ['Cython', 'pytest', 'pytest-timeout', 'nose', 'sphinx', 'sphinx_issues'],
 	},
 	classifiers=[
