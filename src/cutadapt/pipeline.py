@@ -396,7 +396,7 @@ def reader_process(file, file2, connections, queue, buffer_size, stdin_fd):
 						pipe.send_bytes(chunk1)
 						pipe.send_bytes(chunk2)
 			else:
-				for chunk_index, chunk in enumerate(read_chunks_from_file(f, buffer_size)):
+				for chunk_index, chunk in enumerate(read_chunks(f, buffer_size)):
 					# Determine the worker that should get this chunk
 					worker_index = queue.get()
 					pipe = connections[worker_index]

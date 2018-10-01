@@ -55,7 +55,6 @@ def check_cython_version():
 
 extensions = [
 	Extension('cutadapt._align', sources=['src/cutadapt/_align.pyx']),
-	Extension('cutadapt._seqio', sources=['src/cutadapt/_seqio.pyx']),
 	Extension('cutadapt.qualtrim', sources=['src/cutadapt/qualtrim.pyx']),
 ]
 
@@ -113,7 +112,7 @@ setup(
 	entry_points={'console_scripts': ['cutadapt = cutadapt.__main__:main']},
 	install_requires=['dnaio', 'xopen>=0.3.2'],
 	extras_require={
-		'dev': ['Cython', 'pytest', 'pytest-timeout', 'nose', 'sphinx', 'sphinx_issues'],
+		'dev': ['Cython', 'pytest', 'pytest-timeout', 'sphinx', 'sphinx_issues'],
 	},
 	classifiers=[
 		"Development Status :: 5 - Production/Stable",
